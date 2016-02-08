@@ -12,6 +12,7 @@ int mongowrite( const char* wordlist[], const char* buf, int entry, int check) {
 
 	int wordlength;										// int to hold the length of the word
 	int i;												// counter
+	int indent;
 
 	wordlength = sizechk(wordlist, entry) + 2;			// calculate the wordlength, add room for 2 characters: | at BOL and = at EOL
 
@@ -27,14 +28,14 @@ int mongowrite( const char* wordlist[], const char* buf, int entry, int check) {
 
 	chkword[wordlength-1] = 61;							// the last character to look for is =
 
-	if(strchk(wordlength+1,buf,chkword)) {				// check if the buffer contains the checkword at BOL
+	if(indent = strchk(wordlength+1,buf,chkword)) {				// check if the buffer contains the checkword at BOL
 		if(check) {										// if there was a line before this one in the same document...
 			fputs(",\n",stdout);						// ...end last line with a ,
 		}
 		fputs("    ",stdout);							// add spacing before printing the printword
 		fputs(prntword, stdout);						// print the printword
 		fputs(": \"",stdout);							// add a : followed by a space followed by "
-		getdata(buf,chkword,wordlength);				// use getdata to write the data into the newly created mongofield
+		getdata(buf,chkword,wordlength+indent-1);		// use getdata to write the data into the newly created mongofield, accounting for the indenting in the source
 		check = 1;										// indicate that a line has been written
 	}
 	return check;										// return the linewrite indicator

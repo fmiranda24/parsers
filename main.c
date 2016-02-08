@@ -11,7 +11,7 @@ int main( int argc, char ** argv ) {
 	int check = 0;											// integer to help track whether printed line is the last one within the document
 	int i;													// counter
 	int wnr;												// number of words within list
-	const char * fn = "countries.xml";						// file name
+	const char * fn = "countries.xml";							// file name
 	const static int maxString = 1024;						// read buffer size
 	char buf[maxString];									// read buffer
 
@@ -55,13 +55,13 @@ int main( int argc, char ** argv ) {
 
 		// check for XML indicating start of new wiki page
 		char a[] = "<page>";									// tag indicating page start
-		if(strchk(sizeof(a),buf,a)) {							// check buffer for existence of tag at BOL
+		if(strchk(sizeof(a),buf,a) != 0) {							// check buffer for existence of tag at BOL
 			fputs("{\n", stdout);								// output the { to herald the start of a new document to console
 		}
 
 		// check for XML indicating end of new wiki page
 		char b[] = "</page>";									// tag indicating page end
-		if(strchk(sizeof(b),buf,b)) {							// check buffer for existence of tag at BOL
+		if(strchk(sizeof(b),buf,b) != 0) {							// check buffer for existence of tag at BOL
 			fputs("\n},\n", stdout);							// output the } followed by , to herald the end of the doc and be ready for the next
 			check = 0;											// reset check back to 0, no comma at the end of the next line
 		}
